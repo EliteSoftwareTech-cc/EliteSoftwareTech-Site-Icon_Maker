@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Icon Maker :: Native Win32 Multi-Resolution ICO Studio | EliteSoftwareTech.cc</title>
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/85mKDbX8/EliteSoftware-Company-Logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@600;700&family=Segoe+UI:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-primary: "Montserrat Alternates", "Segoe UI Semibold", sans-serif;
+            --font-body: "Segoe UI", Tahoma, Arial, sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.56);
+            --panel-bg: rgba(255, 255, 255, 0.92);
+            --vista-blue-dark: #003b75;
+            --border-glass: rgba(255, 255, 255, 0.8);
+            --border-dark: rgba(19, 75, 134, 0.28);
+            --teal-accent: #0b7a75;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font-body);
+            background-color: #002d5a;
+            background-image:
+                radial-gradient(circle at 10% 15%, rgba(0, 180, 255, 0.6) 0%, transparent 42%),
+                radial-gradient(circle at 90% 85%, rgba(0, 255, 160, 0.3) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(100, 150, 255, 0.35) 0%, transparent 95%),
+                url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
+            background-attachment: fixed;
+            color: #102030;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        .shell {
+            max-width: 1180px;
+            margin: 24px auto;
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px) saturate(190%);
+            -webkit-backdrop-filter: blur(28px) saturate(190%);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 12, 30, 0.58);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(to bottom, rgba(255,255,255,0.98) 0%, rgba(212,230,252,0.94) 100%);
+            border-bottom: 1px solid var(--border-dark);
+            padding: 16px 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .brand { display: flex; align-items: center; gap: 14px; }
+        .brand-orb { width: 60px; height: 60px; object-fit: contain; filter: drop-shadow(0 3px 8px rgba(0,0,0,0.3)); }
+        .brand h1 { font-family: var(--font-primary); font-size: 26px; color: var(--vista-blue-dark); text-shadow: 0 1px 0 #fff; }
+        .brand p { font-size: 11px; color: #465b70; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; }
+        nav { display: flex; gap: 8px; flex-wrap: wrap; }
+        .aero-btn {
+            display: inline-flex; align-items: center; gap: 6px; padding: 8px 15px;
+            border-radius: 5px; border: 1px solid #1c5b99;
+            background: linear-gradient(180deg, #eff7ff 0%, #cde4fc 49%, #b4d4f7 50%, #d3e8ff 100%);
+            color: #0a3460; text-decoration: none; font-family: var(--font-primary); font-size: 13px; font-weight: 600;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 2px rgba(0,0,0,0.16);
+        }
+        .aero-btn:hover { background: linear-gradient(180deg, #ffffff 0%, #dceeff 49%, #c1e0ff 50%, #e4f2ff 100%); }
+        .aero-btn.primary {
+            background: linear-gradient(180deg, #6db3f2 0%, #3a89d6 49%, #1f6cb8 50%, #3787d4 100%);
+            color: #fff; border-color: #134a82; text-shadow: 0 -1px 0 rgba(0,0,0,0.35);
+        }
+        .hero {
+            padding: 32px 28px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(226,240,255,0.84) 100%);
+            border-bottom: 1px solid var(--border-dark);
+        }
+        .hero h2 { font-family: var(--font-primary); font-size: 30px; color: #063566; margin-bottom: 10px; }
+        .hero p { max-width: 820px; font-size: 14px; color: #1f3954; margin-bottom: 18px; }
+        .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        main { padding: 26px 28px 34px; display: grid; gap: 20px; }
+        .two-col { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+        .panel {
+            background: var(--panel-bg); border: 1px solid var(--border-dark); border-radius: 8px;
+            padding: 20px; box-shadow: inset 0 1px 0 #fff, 0 4px 16px rgba(0, 24, 54, 0.14);
+        }
+        .panel h3 {
+            font-family: var(--font-primary); font-size: 18px; color: #093b70;
+            margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+        }
+        .tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; background: #dff7f5; color: var(--teal-accent); border: 1px solid #8ad4ce; }
+        .panel ul { margin-left: 18px; display: grid; gap: 6px; font-size: 13px; color: #21384f; }
+        .shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+        .shot-card {
+            background: #eef5fc; border: 1px solid #bdd4ec; border-radius: 8px; padding: 14px; text-align: center;
+        }
+        .shot-card img { max-width: 100%; height: auto; border-radius: 5px; border: 1px solid #96b4d4; box-shadow: 0 4px 14px rgba(0,25,55,0.2); }
+        .shot-card p { margin-top: 8px; font-size: 12px; font-weight: 600; color: #2e4a66; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #dce6f2; }
+        th { background: #eef5fc; color: #093b70; font-weight: 700; }
+        code { font-family: Consolas, monospace; background: #e9f2fc; padding: 1px 5px; border-radius: 3px; font-size: 12px; color: #0d3d6e; }
+        footer {
+            background: rgba(15, 45, 82, 0.9); color: #d6e7fa; padding: 16px 26px; font-size: 12px;
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+        }
+        footer a { color: #8ad3ff; text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <header>
+            <div class="brand">
+                <img class="brand-orb" src="https://i.postimg.cc/85mKDbX8/EliteSoftware-Company-Logo.png" alt="EliteSoftwareTech Logo" />
+                <div>
+                    <h1>Icon Maker</h1>
+                    <p>Native Win32 C++ Multi-Resolution ICO Editor &amp; Converter &bull; EliteSoftwareTech.cc</p>
+                </div>
+            </div>
+            <nav>
+                <a class="aero-btn primary" href="https://github.com/TheShadyRainbow4/Icon_Maker/releases/download/1.2.5.0/IconMaker.exe">Download IconMaker.exe (v1.2.5.0)</a>
+                <a class="aero-btn" href="https://github.com/TheShadyRainbow4/Icon_Maker/releases/latest" target="_blank" rel="noopener">Release Notes</a>
+                <a class="aero-btn" href="https://github.com/TheShadyRainbow4/Icon_Maker" target="_blank" rel="noopener">GitHub Repo</a>
+                <a class="aero-btn" href="https://main.elitesoftwaretech.cc/">Main Portal</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h2>Native C++ Multi-Resolution Windows Icon Studio</h2>
+            <p>
+                <strong>Icon Maker</strong> creates, edits, previews, and exports hybrid multi-resolution Windows <code>.ico</code> containers (256&times;256 PNG stream down to 16&times;16 32bpp DIB + 1bpp AND mask) from any WIC-supported image format, featuring border-aware background stripping, magic wand color keying, pixel touch-up brushes, and live 8-size previews.
+            </p>
+            <div class="hero-actions">
+                <a class="aero-btn primary" href="https://github.com/TheShadyRainbow4/Icon_Maker/releases/download/1.2.5.0/IconMaker.exe">Download IconMaker.exe (v1.2.5.0)</a>
+                <a class="aero-btn" href="https://github.com/TheShadyRainbow4/Icon_Maker" target="_blank" rel="noopener">View Source Code</a>
+            </div>
+        </section>
+
+        <main>
+            <section class="panel">
+                <h3>Application Screenshots <span class="tag">v1.2.5.0 LIVE</span></h3>
+                <div class="shot-grid">
+                    <div class="shot-card">
+                        <img src="/screenshot_main.png" alt="Icon Maker Main Studio Screenshot">
+                        <p>Interactive Canvas, Tool Sidebar &amp; Live 8-Resolution Preview Panel</p>
+                    </div>
+                    <div class="shot-card">
+                        <img src="/screenshot_options.png" alt="Icon Maker Options Dialog Screenshot">
+                        <p>Options Dialog &amp; Custom Checkerboard Background Settings</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="two-col">
+                <section class="panel">
+                    <h3>Editing &amp; Transparency Engine <span class="tag">GDI+ &amp; WIC</span></h3>
+                    <ul>
+                        <li><strong>Auto-Strip Background:</strong> Border/corner flood-fill removal with anti-aliased edge feathering.</li>
+                        <li><strong>Magic Wand (Contiguous &amp; Global):</strong> Sample and strip matching colors within tolerance.</li>
+                        <li><strong>Eraser, Paint Brush &amp; Eyedropper:</strong> Manual 1px–64px pixel editing with full Undo/Redo (<code>Ctrl+Z</code> / <code>Ctrl+Y</code>).</li>
+                        <li><strong>Bicubic Resampling:</strong> Alpha-premultiplied downscaling across <code>256</code>, <code>128</code>, <code>96</code>, <code>64</code>, <code>48</code>, <code>32</code>, <code>24</code>, and <code>16</code> px sizes.</li>
+                    </ul>
+                </section>
+
+                <section class="panel">
+                    <h3>Windows Native Architecture <span class="tag">WIN32 &bull; CMAKE</span></h3>
+                    <ul>
+                        <li><strong>Full ICO Container Parser:</strong> Reads PNG and DIB icon frames (1, 4, 8, 24, 32 bpp) and promotes the largest frame to master canvas.</li>
+                        <li><strong>20 Embedded Custom Cursors:</strong> Compiled directly from <code>resources/Cursors/</code> (<code>.cur</code> &amp; <code>.ani</code>).</li>
+                        <li><strong>Registry Persistence:</strong> Stores settings and window geometry under <code>HKCU\EliteSoftware\IconMaker</code>.</li>
+                        <li><strong>Headless Self-Test:</strong> Run <code>IconMaker.exe --test</code> to verify codecs, scaling, cursors, and registry persistence.</li>
+                    </ul>
+                </section>
+            </div>
+
+            <section class="panel">
+                <h3>Keyboard Shortcuts</h3>
+                <table>
+                    <thead>
+                        <tr><th>Shortcut</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>Ctrl + O</code> / <code>Ctrl + S</code></td><td>Open image or ICO / Export multi-resolution <code>.ico</code></td></tr>
+                        <tr><td><code>Ctrl + Z</code> / <code>Ctrl + Y</code></td><td>Undo / Redo edit stack</td></tr>
+                        <tr><td><code>Ctrl + +</code> / <code>Ctrl + -</code> / <code>Ctrl + 0</code> / <code>Ctrl + F</code></td><td>Zoom In / Zoom Out / Reset 100% / Fit Window</td></tr>
+                        <tr><td><code>Right-Click Drag</code> / <code>Middle Drag</code></td><td>Pan interactive canvas</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <footer>
+            <div>
+                <strong>Icon Maker</strong> &bull; Maintained by <strong>Zachary (TheShadyRainbow4)</strong> at <a href="https://main.elitesoftwaretech.cc/">EliteSoftwareTech.cc</a>
+            </div>
+            <div>
+                <a href="https://github.com/TheShadyRainbow4/Icon_Maker" target="_blank" rel="noopener">Source Repository</a> &bull;
+                <a href="https://github.com/TheShadyRainbow4/Icon_Maker/releases/tag/1.2.5.0" target="_blank" rel="noopener">Release v1.2.5.0</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
